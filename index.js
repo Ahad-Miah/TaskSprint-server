@@ -37,6 +37,14 @@ async function run() {
         const result=await TasksCollection.insertOne(task);
         res.send(result);
     })
+    // get catagorized task
+    app.get('/tasks',async (req,res)=>{
+        const category=req.query.category;
+        const email=req.query.email;
+        const query = { email, category };
+        const result= await TasksCollection.find(query).toArray();
+        res.send(result);
+    })
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
