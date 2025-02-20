@@ -2,7 +2,7 @@ require('dotenv').config()
 const express=require('express');
 const cors=require('cors')
 const app=express();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port=process.env.PORT || 5000;
 
 //middle ware
@@ -43,6 +43,14 @@ async function run() {
         const {category,email}=req.query;
         let query={category,email}
      const result= await TasksCollection.find(query).toArray();
+        res.send(result);
+    })
+
+    // get single task
+    app.get('/tasks/:id',async (req,res)=>{
+        const id=req.params.id;
+        const filter={_id:new ObjectId(id)};
+        const result=await TasksCollection.findOne(filter);
         res.send(result);
     })
   } finally {
