@@ -39,10 +39,10 @@ async function run() {
     })
     // get catagorized task
     app.get('/tasks',async (req,res)=>{
-        const category=req.query.category;
-        const email=req.query.email;
-        const query = { email, category };
-        const result= await TasksCollection.find(query).toArray();
+       
+        const {category,email}=req.query;
+        let query={category,email}
+     const result= await TasksCollection.find(query).toArray();
         res.send(result);
     })
   } finally {
