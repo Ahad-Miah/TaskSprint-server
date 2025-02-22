@@ -27,9 +27,25 @@ async function run() {
     await client.connect();
     const database = client.db("TaskSprintDb");
     const TasksCollection = database.collection("Tasks");
+    const usersCollection = database.collection("users");
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+    // add user to database
+    app.post('/users/:email', async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+      // console.log(user);
+      // console.log(email);
+      const query = { email }
+      const isExist = await usersCollection.findOne(query);
+      if (isExist) {
+          return res.status("already exists");
+      }
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
+  })
 
     // add a task
     app.post('/tasks',async (req,res)=>{
