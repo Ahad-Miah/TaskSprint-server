@@ -53,6 +53,22 @@ async function run() {
         const result=await TasksCollection.findOne(filter);
         res.send(result);
     })
+    // update task
+    app.put('/tasks/:id',  async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const option = { upsert: true };
+      const updateTask = req.body;
+      const task = {
+          $set: {
+              title: updateTask.title,
+              description: updateTask.description,
+              category:updateTask.category,
+          }
+      }
+      const result = await TasksCollection.updateOne(filter, task, option)
+      res.send(result);
+  })
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
